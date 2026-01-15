@@ -101,11 +101,26 @@
 
 
       } else {
-        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
+        // Desktop style: scale to fit within window while preserving aspect ratio
+        function resizeCanvas() {
+          const targetAspect = 1920 / 1080;
+          const windowAspect = window.innerWidth / window.innerHeight;
 
-        canvas.style.width = "1920px";
-        canvas.style.height = "1080px";
+          if (windowAspect > targetAspect) {
+            // Window is wider relative to target → limit by height
+            canvas.style.height = window.innerHeight + "px";
+            canvas.style.width = (window.innerHeight * targetAspect) + "px";
+          } else {
+            // Window is taller relative to target → limit by width
+            canvas.style.width = window.innerWidth + "px";
+            canvas.style.height = (window.innerWidth / targetAspect) + "px";
+          }
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
       }
+
 
       loadingBar.style.display = "block";
 
